@@ -33,27 +33,6 @@ public class AdminController {
     @Autowired
     private JwtUtil jwtUtil;
 
-//    @GetMapping("/check-admin")
-//    public ResponseEntity<?> checkAdmin(HttpServletRequest request) {
-//        try {
-//            String token = request.getHeader("Authorization");
-//            if (token == null || !token.startsWith("Bearer ")) {
-//                return ResponseEntity.status(401).body("Chưa đăng nhập!");
-//            }
-//
-//            token = token.substring(7); // Loại bỏ "Bearer "
-//            String username = jwtUtil.extractUsername(token);
-//            User user = userService.findByUsername(username);
-//
-//            if (user != null && user.getRole().getId() == 1) { // Role ID = 1 là admin
-//                return ResponseEntity.ok(true);
-//            } else {
-//                return ResponseEntity.status(403).body("Không có quyền admin!");
-//            }
-//        } catch (Exception e) {
-//            return ResponseEntity.status(500).body("Lỗi hệ thống: " + e.getMessage());
-//        }
-//    }
     //Quản lý tất cả bài đăng
     @GetMapping("/post")
     public ResponseEntity<List<PostDto>> getAllPosts() {

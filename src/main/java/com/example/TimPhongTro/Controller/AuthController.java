@@ -38,7 +38,7 @@ public class AuthController {
     @Autowired
     private EmailService emailService;
 
-    @PostMapping("/loginUser")
+    @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
         User user = userService.findByUsername(loginRequest.getUsername());
 
