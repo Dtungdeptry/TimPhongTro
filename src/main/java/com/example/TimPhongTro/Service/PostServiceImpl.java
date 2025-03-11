@@ -2,13 +2,13 @@ package com.example.TimPhongTro.Service;
 
 import com.example.TimPhongTro.Entity.Post;
 import com.example.TimPhongTro.Entity.User;
+import com.example.TimPhongTro.Exception.NotFoundException;
 import com.example.TimPhongTro.Model.Dto.PostDto;
 import com.example.TimPhongTro.Model.Mapper.PostMapper;
 import com.example.TimPhongTro.Repository.PostRepository;
 import com.example.TimPhongTro.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,27 +33,22 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPostsPending() {
-        List<Post> posts = postRepository.findByStatus("pending");
-        return posts.stream()
+    public PostDto getPostById(int id) {
+        return postRepository.findById(id)
                 .map(PostMapper::toDto)
-                .toList();
+                .orElseThrow(() -> new RuntimeException("Bài đăng với ID " + id + " không tồn tại"));
     }
-    // Tạo bài đăng mới
+
     @Override
     public PostDto createPost(PostDto postDto) {
-        // Lấy thông tin User đã đăng nhập từ SecurityContext
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();  // Lấy tên người dùng đã đăng nhập
+        Post post = postMapper.toEntity(postDto);
 
-        User user = userRepository.findByFullNameContaining(username)
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        // Lấy đối tượng User từ UserRepository và gán vào Post
+        User user = userRepository.findById(postDto.getUserId())
+                .orElseThrow(() -> new RuntimeException("User không tồn tại"));
+        post.setUser(user);
 
-        Post post = postMapper.toEntity(postDto, user);
         post = postRepository.save(post);
-
         return postMapper.toDto(post);
     }
 
@@ -85,77 +80,10 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> getPostsBySearchCriteria(String priceRange, String roomType, String location, String area) {
-        List<Post> posts;
-
-        // Tìm kiếm theo tất cả các điều kiện
-        if (priceRange != null && roomType != null && location != null && area != null) {
-            posts = postRepository.findByPriceRangeAndRoomTypeAndLocationAndArea(priceRange, roomType, location, area);
-        }
-        // Tìm kiếm theo priceRange, roomType và location
-        else if (priceRange != null && roomType != null && location != null) {
-            posts = postRepository.findByPriceRangeAndRoomTypeAndLocation(priceRange, roomType, location);
-        }
-        // Tìm kiếm theo priceRange, roomType và area
-        else if (priceRange != null && roomType != null && area != null) {
-            posts = postRepository.findByPriceRangeAndRoomTypeAndArea(priceRange, roomType, area);
-        }
-        // Tìm kiếm theo priceRange, location và area
-        else if (priceRange != null && location != null && area != null) {
-            posts = postRepository.findByPriceRangeAndAreaAndLocation(priceRange, area, location);
-        }
-        //Tìm kiếm theo roomType, location và area
-        else if (roomType != null && location != null && area != null) {
-            posts = postRepository.findByRoomTypeAndLocationAndArea(roomType, location, area);
-        }
-        // Tìm kiếm theo priceRange và roomType
-        else if (priceRange != null && roomType != null) {
-            posts = postRepository.findByPriceRangeAndRoomType(priceRange, roomType);
-        }
-        // Tìm kiếm theo priceRange và location
-        else if (priceRange != null && location != null) {
-            posts = postRepository.findByPriceRangeAndLocation(priceRange, location);
-        }
-        // Tìm kiếm theo priceRange và area
-        else if (priceRange != null && area != null) {
-            posts = postRepository.findByPriceRangeAndArea(priceRange, area);
-        }
-        // Tìm kiếm theo roomType và location
-        else if (roomType != null && location != null) {
-            posts = postRepository.findByRoomTypeAndLocation(roomType, location);
-        }
-        // Tìm kiếm theo roomType và area
-        else if (roomType != null && area != null) {
-            posts = postRepository.findByRoomTypeAndArea(roomType, area);
-        }
-        // Tìm kiếm theo location và area
-        else if (location != null && area != null) {
-            posts = postRepository.findByAreaAndLocation(area, location);
-        }
-        // Tìm kiếm chỉ theo priceRange
-        else if (priceRange != null) {
-            posts = postRepository.findByPriceRange(priceRange);
-        }
-        // Tìm kiếm chỉ theo roomType
-        else if (roomType != null) {
-            posts = postRepository.findByRoomType(roomType);
-        }
-        // Tìm kiếm chỉ theo location
-        else if (location != null) {
-            posts = postRepository.findByLocation(location);
-        }
-        // Tìm kiếm chỉ theo area
-        else if (area != null) {
-            posts = postRepository.findByArea(area);
-        }
-        // Trường hợp không có điều kiện nào, lấy tất cả bài đăng
-        else {
-            posts = postRepository.findAll();
-        }
-
-        return postMapper.toDto(posts); // Chuyển danh sách bài đăng thành DTO
+        Specification<Post> spec = PostSpecification.searchPosts(priceRange, roomType, location, area);
+        List<Post> posts = postRepository.findAll(spec);
+        return postMapper.toDto(posts);
     }
-
-
 
     @Override
     public void deletePostById(int postId) {
@@ -163,5 +91,27 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy bài đăng với ID: " + postId));
 
         postRepository.delete(post);
+    }
+
+    @Override
+    public PostDto updatePost(int id, PostDto postDto) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Post not found"));
+        post.setTitle(postDto.getTitle());
+        post.setContent(postDto.getContent());
+        post.setPriceRange(postDto.getPriceRange());
+        post.setRoomType(postDto.getRoomType());
+        post.setLocation(postDto.getLocation());
+        post.setArea(postDto.getArea());
+        post = postRepository.save(post);
+        return PostMapper.toDto(post);
+    }
+
+    @Override
+    public List<PostDto> searchTitle(String keyword) {
+        List<Post> posts = postRepository.findByTitle(keyword);
+        return posts.stream()
+                .map(PostMapper::toDto)
+                .toList();
     }
 }

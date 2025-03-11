@@ -1,46 +1,30 @@
 package com.example.TimPhongTro.Model.Dto;
 
+import com.example.TimPhongTro.Entity.Area;
+import com.example.TimPhongTro.Entity.PostLocation;
+import com.example.TimPhongTro.Entity.PriceRange;
+import com.example.TimPhongTro.Entity.RoomType;
+
+import java.time.LocalDateTime;
+
 public class PostDto {
     private int id;
     private int userId;
     private String title;
     private String content;
     private String status;
-    private String priceRange;
-    private String roomType;
-    private String location;
-    private String area;
+    private PriceRange priceRange;
+    private RoomType roomType;
+    private PostLocation location;
+    private Area area;
+    private LocalDateTime created_at;
 
-    public String getArea() {
-        return area;
+    public LocalDateTime getCreated_at() {
+        return created_at;
     }
 
-    public void setArea(String area) {
-        this.area = area;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getPriceRange() {
-        return priceRange;
-    }
-
-    public void setPriceRange(String priceRange) {
-        this.priceRange = priceRange;
-    }
-
-    public String getRoomType() {
-        return roomType;
-    }
-
-    public void setRoomType(String roomType) {
-        this.roomType = roomType;
+    public void setCreated_at(LocalDateTime created_at) {
+        this.created_at = created_at;
     }
 
     // Getter và Setter
@@ -82,5 +66,37 @@ public class PostDto {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public PriceRange getPriceRange() {
+        return priceRange;
+    }
+
+    public void setPriceRange(PriceRange priceRange) {
+        this.priceRange = priceRange;
+    }
+
+    public RoomType getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(RoomType roomType) {
+        this.roomType = roomType;
+    }
+
+    public PostLocation getLocation() {
+        return location;
+    }
+
+    public void setLocation(PostLocation location) {
+        this.location = location;
+    }
+
+    public Area getArea() {
+        return area;
+    }
+
+    public void setArea(Area area) {
+        this.area = area;
     }
 }

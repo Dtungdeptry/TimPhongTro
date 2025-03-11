@@ -40,12 +40,19 @@ public class AdminController {
         return ResponseEntity.ok(posts);
     }
 
+    @GetMapping("post/{id}")
+    public ResponseEntity<PostDto> getPostById(@PathVariable int id) {
+        PostDto postDto = postService.getPostById(id);
+        return ResponseEntity.ok(postDto);
+    }
+
     //Danh sách bài đăng đang trong trạng thái pending (get, put)
     @GetMapping("/post/status/pending")
     public ResponseEntity<List<PostDto>> getPendingPosts() {
         List<PostDto> posts = postService.getPostsByStatus("pending");
         return ResponseEntity.ok(posts);
     }
+
 
     //Danh sách bài đăng đã được accepted (get, delete) (Xong)
     @GetMapping("/post/status/approved")
@@ -134,6 +141,6 @@ public class AdminController {
     @DeleteMapping("/users/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
-        return ResponseEntity.ok("Xóa bài đăng thành công");
+        return ResponseEntity.ok("Xóa người dùng thành công");
     }
 }

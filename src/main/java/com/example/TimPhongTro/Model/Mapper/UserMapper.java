@@ -16,8 +16,9 @@ public class UserMapper {
         dto.setPhone(user.getPhone());
         dto.setFullName(user.getFullName());
         dto.setAddress(user.getAddress());
+        dto.setCreated_at(user.getCreatedAt());
         // Lấy role_id từ Role object
-        dto.setRole(user.getRole() != null ? user.getRole().getId() : null); // ✅ Chỉ lưu role_id
+        dto.setRole(user.getRole() != null ? user.getRole().getId() : null);
         return dto;
     }
 
@@ -33,7 +34,8 @@ public class UserMapper {
         user.setPhone(dto.getPhone());
         user.setFullName(dto.getFullName());
         user.setAddress(dto.getAddress());
-        user.setRole(role); // ✅ Gán Role object
+        user.setCreatedAt(dto.getCreated_at());
+        user.setRole(role);
         return user;
     }
 }

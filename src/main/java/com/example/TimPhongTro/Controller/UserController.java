@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -37,8 +38,8 @@ public class UserController {
 
     //Xem thông tin bài đăng
     @GetMapping("")
-    public ResponseEntity<List<PostDto>> getAllPostsPending() {
-        List<PostDto> posts = postService.getAllPostsPending();
+    public ResponseEntity<List<PostDto>> getAllPostsApproved() {
+        List<PostDto> posts = postService.getPostsByStatus("approved");
         return ResponseEntity.ok(posts);
     }
 

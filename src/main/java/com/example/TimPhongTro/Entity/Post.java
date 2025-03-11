@@ -1,6 +1,7 @@
 package com.example.TimPhongTro.Entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -25,54 +26,60 @@ public class Post {
     @Column(nullable = false)
     private String status;
 
-    @Column(name = "created_at", updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at", updatable = false)
+    @CreationTimestamp
     private LocalDateTime createdAt;
+
 
     @Column(name = "updated_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime updatedAt;
 
-    @Column(name = "priceRange")
-    private String priceRange;
+    @ManyToOne
+    @JoinColumn(name = "price_range_id", foreignKey = @ForeignKey(name = "fk_posts_pricerange"))
+    private PriceRange priceRange;
 
-    @Column(name = "location")
-    private String location;
+    @ManyToOne
+    @JoinColumn(name = "location_id", foreignKey = @ForeignKey(name = "fk_posts_location"))
+    private PostLocation location;
 
-    @Column(name = "area")
-    private String area;
+    @ManyToOne
+    @JoinColumn(name = "area_id", foreignKey = @ForeignKey(name = "fk_posts_area"))
+    private Area area;
 
-    @Column(name = "roomType")
-    private String roomType;
+    @ManyToOne
+    @JoinColumn(name = "room_type_id", foreignKey = @ForeignKey(name = "fk_posts_roomtype"))
+    private RoomType roomType;
 
-    public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getRoomType() {
-        return roomType;
-    }
-
-    public void setRoomType(String roomType) {
-        this.roomType = roomType;
-    }
-
-    public String getPriceRange() {
+    public PriceRange getPriceRange() {
         return priceRange;
     }
 
-    public void setPriceRange(String priceRange) {
+    public void setPriceRange(PriceRange priceRange) {
         this.priceRange = priceRange;
+    }
+
+    public PostLocation getLocation() {
+        return location;
+    }
+
+    public void setLocation(PostLocation location) {
+        this.location = location;
+    }
+
+    public Area getArea() {
+        return area;
+    }
+
+    public void setArea(Area area) {
+        this.area = area;
+    }
+
+    public RoomType getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(RoomType roomType) {
+        this.roomType = roomType;
     }
 
     public int getId() {

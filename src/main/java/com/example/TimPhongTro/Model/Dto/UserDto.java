@@ -6,6 +6,8 @@ import com.example.TimPhongTro.Entity.Role;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.time.LocalDateTime;
+
 public class UserDto {
     private int id;
     private String username;
@@ -17,6 +19,17 @@ public class UserDto {
     private String fullName;
     private String address;
     private int role_id;
+
+    public LocalDateTime getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(LocalDateTime created_at) {
+        this.created_at = created_at;
+    }
+
+    private LocalDateTime created_at;  // Kiểm tra có khai báo không
+
 
 
 

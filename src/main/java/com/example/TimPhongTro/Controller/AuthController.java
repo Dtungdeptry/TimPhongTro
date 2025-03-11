@@ -13,10 +13,8 @@ import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 
 @RestController
 @RequestMapping("/auth")
@@ -49,28 +47,29 @@ public class AuthController {
         String inputPassword = loginRequest.getPassword();
         String storedPassword = user.getPassword();
 
-        if (storedPassword.startsWith("$2a$")) {
-            if (passwordEncoder.matches(inputPassword, storedPassword)) {
-                String token = jwtUtil.generateToken(user.getUsername());
-                return ResponseEntity.ok(new AuthResponse(token));
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sai mật khẩu!");
-            }
-        } else {
-            if (inputPassword.equals(storedPassword)) {
-                String encodedPassword = passwordEncoder.encode(inputPassword);
+        // Kiểm tra mật khẩu đã được mã hóa (BCrypt) hay chưa
+        boolean isPasswordMatch = storedPassword.startsWith("$2a$")
+                ? passwordEncoder.matches(inputPassword, storedPassword)
+                : inputPassword.equals(storedPassword);
 
-                user.setPassword(encodedPassword);
-                userService.updateUserLogin(user);
-
-                String token = jwtUtil.generateToken(user.getUsername());
-                return ResponseEntity.ok(new AuthResponse(token));
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sai mật khẩu!");
-            }
+        if (!isPasswordMatch) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sai mật khẩu!");
         }
-    }
 
+        // Nếu mật khẩu chưa được mã hóa, mã hóa và cập nhật
+        if (!storedPassword.startsWith("$2a$")) {
+            String encodedPassword = passwordEncoder.encode(inputPassword);
+            user.setPassword(encodedPassword);
+            userService.updateUserLogin(user);
+        }
+
+        // Tạo JWT token
+        String token = jwtUtil.generateToken(user.getUsername());
+        int roleId = user.getRole() != null ? user.getRole().getId() : 0;
+
+        // Trả về phản hồi với token, userId và roleId
+        return ResponseEntity.ok(new AuthResponse(token, user.getId(), roleId));
+    }
 
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@RequestBody RegisterRequest registerRequest) throws MessagingException {

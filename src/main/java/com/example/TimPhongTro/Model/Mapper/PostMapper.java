@@ -1,10 +1,8 @@
 package com.example.TimPhongTro.Model.Mapper;
 
 import com.example.TimPhongTro.Entity.Post;
-import com.example.TimPhongTro.Entity.Role;
 import com.example.TimPhongTro.Entity.User;
 import com.example.TimPhongTro.Model.Dto.PostDto;
-import com.example.TimPhongTro.Model.Dto.UserDto;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,13 +10,19 @@ import java.util.List;
 
 @Component
 public class PostMapper {
+
     public static PostDto toDto(Post post) {
         if (post == null) {
             return null;
         }
-        PostDto dto = new PostDto();
+
+        PostDto dto = new PostDto(); // Khởi tạo trước khi gán userId
         dto.setId(post.getId());
-        dto.setUserId(post.getUser().getId());  // Gán userId từ User object
+
+        if (post.getUser() != null) {
+            dto.setUserId(post.getUser().getId());
+        }
+
         dto.setTitle(post.getTitle());
         dto.setContent(post.getContent());
         dto.setStatus(post.getStatus());
@@ -26,13 +30,13 @@ public class PostMapper {
         dto.setLocation(post.getLocation());
         dto.setRoomType(post.getRoomType());
         dto.setArea(post.getArea());
+        dto.setCreated_at(post.getCreatedAt());
+
         return dto;
     }
 
-    public static Post toEntity(PostDto dto, User user) {
-        if (dto == null) {
-            return null;
-        }
+    public static Post toEntity(PostDto dto) {
+
 
         Post post = new Post();
         post.setId(dto.getId());
@@ -43,9 +47,11 @@ public class PostMapper {
         post.setRoomType(dto.getRoomType());
         post.setLocation(dto.getLocation());
         post.setArea(dto.getArea());
-        post.setUser(user);
+        post.setCreatedAt(dto.getCreated_at());
+
         return post;
     }
+
     public static List<PostDto> toDto(List<Post> posts) {
         List<PostDto> dtoList = new ArrayList<>();
         for (Post post : posts) {
