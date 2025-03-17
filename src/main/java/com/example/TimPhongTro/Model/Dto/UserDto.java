@@ -2,7 +2,6 @@ package com.example.TimPhongTro.Model.Dto;
 
 import jakarta.validation.constraints.NotBlank; // Đối với Jakarta (Spring Boot 3+)
 import com.example.TimPhongTro.Entity.User;
-import com.example.TimPhongTro.Entity.Role;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

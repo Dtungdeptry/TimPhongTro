@@ -18,6 +18,15 @@ public class PostDto {
     private PostLocation location;
     private Area area;
     private LocalDateTime created_at;
+    private String imageUrl;
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
     public LocalDateTime getCreated_at() {
         return created_at;

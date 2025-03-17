@@ -1,9 +1,6 @@
 package com.example.TimPhongTro.Controller;
 
-import com.example.TimPhongTro.Entity.Post;
-import com.example.TimPhongTro.Entity.User;
 import com.example.TimPhongTro.Model.Dto.PostDto;
-import com.example.TimPhongTro.Model.Mapper.PostMapper;
 import com.example.TimPhongTro.Repository.PostRepository;
 import com.example.TimPhongTro.Service.PostService;
 import com.example.TimPhongTro.Service.UserService;
@@ -32,17 +29,17 @@ public class PostController {
         return ResponseEntity.ok(posts);
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<PostDto>> searchPosts(
-            @RequestParam(required = false) String priceRange,
-            @RequestParam(required = false) String roomType,
-            @RequestParam(required = false) String location,
-            @RequestParam(required = false) String area) {
-
-        List<PostDto> posts = postService.getPostsBySearchCriteria(priceRange, roomType, location, area);
-
-        return ResponseEntity.ok(posts);
-    }
+//    @GetMapping("/search")
+//    public ResponseEntity<List<PostDto>> searchPosts(
+//            @RequestParam(required = false) String priceRange,
+//            @RequestParam(required = false) String roomType,
+//            @RequestParam(required = false) String location,
+//            @RequestParam(required = false) String area) {
+//
+//        List<PostDto> posts = postService.getPostsBySearchCriteria(priceRange, roomType, location, area);
+//
+//        return ResponseEntity.ok(posts);
+//    }
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<PostDto>> getPostByUserId(@PathVariable int userId) {

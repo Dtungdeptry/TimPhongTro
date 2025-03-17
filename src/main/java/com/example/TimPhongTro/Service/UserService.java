@@ -1,6 +1,5 @@
 package com.example.TimPhongTro.Service;
 
-import com.example.TimPhongTro.Entity.Role;
 import com.example.TimPhongTro.Entity.User;
 import com.example.TimPhongTro.Model.Dto.UserDto;
 
@@ -27,5 +26,4 @@ public interface UserService {
 
     void registerUser(User user);
 
-    User getCurrentUser();
 }

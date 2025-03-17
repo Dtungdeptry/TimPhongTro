@@ -1,17 +1,22 @@
 package com.example.TimPhongTro.Controller;
 
-import com.example.TimPhongTro.Entity.Post;
-import com.example.TimPhongTro.Entity.User;
+import com.example.TimPhongTro.Entity.*;
 import com.example.TimPhongTro.Model.Dto.*;
-import com.example.TimPhongTro.Model.Mapper.PostMapper;
 import com.example.TimPhongTro.Repository.PostRepository;
 import com.example.TimPhongTro.Service.DropdownService;
 import com.example.TimPhongTro.Service.PostService;
 import com.example.TimPhongTro.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -23,6 +28,12 @@ public class OwnerController {
 
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
+    private UserService userService;
 
     //Quản lý bài đăng của mình (thêm sửa xóa, xem chi tiết bài đăng, tìm kiếm)
     @GetMapping("/post/{userId}")
@@ -76,5 +87,25 @@ public class OwnerController {
     @GetMapping("/post/areas")
     public List<AreaDto> getAreas() {
         return dropdownService.getAllAreas();
+    }
+    @GetMapping("/post/{userId}/list-page")
+    public ResponseEntity<Page<Post>> getPosts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Post> postPage = postRepository.findAll(pageable);
+        return ResponseEntity.ok(postPage);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> getOwnerById(@PathVariable int userId) {
+        UserDto userDto = userService.getUserById(userId);
+        return ResponseEntity.ok(userDto);
+    }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<?> updateOwner(@RequestBody UserDto userDto) {
+        UserDto updatedUser = userService.updateUser(userDto);
+        return ResponseEntity.ok(updatedUser);
     }
 }

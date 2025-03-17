@@ -43,7 +43,6 @@ public class PostServiceImpl implements PostService {
     public PostDto createPost(PostDto postDto) {
         Post post = postMapper.toEntity(postDto);
 
-        // Lấy đối tượng User từ UserRepository và gán vào Post
         User user = userRepository.findById(postDto.getUserId())
                 .orElseThrow(() -> new RuntimeException("User không tồn tại"));
         post.setUser(user);
@@ -78,9 +77,10 @@ public class PostServiceImpl implements PostService {
         postRepository.delete(posts.get(0));
     }
 
+
     @Override
-    public List<PostDto> getPostsBySearchCriteria(String priceRange, String roomType, String location, String area) {
-        Specification<Post> spec = PostSpecification.searchPosts(priceRange, roomType, location, area);
+    public List<PostDto> getPostsBySearchCriteria(String priceRange, String roomType, String location, String area, String status) {
+        Specification<Post> spec = PostSpecification.searchPosts(priceRange, roomType, location, area, status);
         List<Post> posts = postRepository.findAll(spec);
         return postMapper.toDto(posts);
     }
@@ -109,7 +109,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> searchTitle(String keyword) {
-        List<Post> posts = postRepository.findByTitle(keyword);
+        String processedKeyword = "%" + keyword + "%";
+        List<Post> posts = postRepository.findByTitle(processedKeyword);
         return posts.stream()
                 .map(PostMapper::toDto)
                 .toList();

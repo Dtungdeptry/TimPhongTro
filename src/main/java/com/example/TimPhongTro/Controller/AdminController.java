@@ -1,17 +1,12 @@
 package com.example.TimPhongTro.Controller;
 
 import com.example.TimPhongTro.Config.JwtUtil;
-import com.example.TimPhongTro.Entity.Post;
-import com.example.TimPhongTro.Entity.User;
-import com.example.TimPhongTro.Exception.NotFoundException;
 import com.example.TimPhongTro.Model.Dto.PostDto;
 import com.example.TimPhongTro.Model.Dto.UserDto;
 import com.example.TimPhongTro.Repository.PostRepository;
 import com.example.TimPhongTro.Service.PostService;
 import com.example.TimPhongTro.Service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

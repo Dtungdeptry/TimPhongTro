@@ -1,7 +1,6 @@
 package com.example.TimPhongTro.Model.Mapper;
 
 import com.example.TimPhongTro.Entity.Post;
-import com.example.TimPhongTro.Entity.User;
 import com.example.TimPhongTro.Model.Dto.PostDto;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +15,7 @@ public class PostMapper {
             return null;
         }
 
-        PostDto dto = new PostDto(); // Khởi tạo trước khi gán userId
+        PostDto dto = new PostDto();
         dto.setId(post.getId());
 
         if (post.getUser() != null) {
@@ -31,6 +30,7 @@ public class PostMapper {
         dto.setRoomType(post.getRoomType());
         dto.setArea(post.getArea());
         dto.setCreated_at(post.getCreatedAt());
+        dto.setImageUrl(post.getImageUrl());
 
         return dto;
     }
@@ -48,6 +48,9 @@ public class PostMapper {
         post.setLocation(dto.getLocation());
         post.setArea(dto.getArea());
         post.setCreatedAt(dto.getCreated_at());
+        if (dto.getImageUrl() != null) {
+            post.setImageUrl(dto.getImageUrl());
+        }
 
         return post;
     }

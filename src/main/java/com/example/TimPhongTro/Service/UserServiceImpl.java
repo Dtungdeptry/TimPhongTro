@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> searchUser(String keyword) {
-        List<User> users = userRepository.findByFullNameContaining(keyword);
+        List<User> users = userRepository.findByFullNameContainingIgnoreCaseAndRole_Id(keyword, 2);
         return users.stream()
                 .map(UserMapper::toDto)
                 .toList();

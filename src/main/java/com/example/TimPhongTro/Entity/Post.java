@@ -50,6 +50,17 @@ public class Post {
     @JoinColumn(name = "room_type_id", foreignKey = @ForeignKey(name = "fk_posts_roomtype"))
     private RoomType roomType;
 
+    @Column(name = "img_url", length = 500)
+    private String imageUrl;
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public PriceRange getPriceRange() {
         return priceRange;
     }

@@ -1,9 +1,6 @@
 package com.example.TimPhongTro.Service;
 
-import com.example.TimPhongTro.Entity.User;
 import com.example.TimPhongTro.Model.Dto.PostDto;
-import com.example.TimPhongTro.Model.Dto.UserDto;
-
 import java.util.List;
 
 public interface PostService {
@@ -19,7 +16,9 @@ public interface PostService {
 
     void deletePostOwner(int userId, int postId);
 
-    List<PostDto> getPostsBySearchCriteria(String priceRange, String roomType, String location, String area);
+//    List<PostDto> getPostsBySearchCriteria(String priceRange, String roomType, String location, String area);
+
+    List<PostDto> getPostsBySearchCriteria(String priceRange, String roomType, String location, String area, String status);
 
     void deletePostById(int postId);
 
