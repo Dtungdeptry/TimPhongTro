@@ -44,7 +44,7 @@ public class OwnerController {
 
     @PostMapping("/post/{userId}")
     public ResponseEntity<?> createPost(@PathVariable int userId, @RequestBody PostDto postDto) {
-        postDto.setStatus("pending");  // Thiết lập trạng thái mặc định là "pending"
+        postDto.setStatus("pending");
         postDto.setUserId(userId);
         PostDto newPostDto = postService.createPost(postDto);
         return ResponseEntity.ok(newPostDto);

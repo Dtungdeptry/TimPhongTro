@@ -1,11 +1,9 @@
 package com.example.TimPhongTro.Model.Dto;
 
-import com.example.TimPhongTro.Entity.Area;
-import com.example.TimPhongTro.Entity.PostLocation;
-import com.example.TimPhongTro.Entity.PriceRange;
-import com.example.TimPhongTro.Entity.RoomType;
+import com.example.TimPhongTro.Entity.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class PostDto {
     private int id;
@@ -18,15 +16,6 @@ public class PostDto {
     private PostLocation location;
     private Area area;
     private LocalDateTime created_at;
-    private String imageUrl;
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
 
     public LocalDateTime getCreated_at() {
         return created_at;

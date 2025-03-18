@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
@@ -49,17 +51,6 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "room_type_id", foreignKey = @ForeignKey(name = "fk_posts_roomtype"))
     private RoomType roomType;
-
-    @Column(name = "img_url", length = 500)
-    private String imageUrl;
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
 
     public PriceRange getPriceRange() {
         return priceRange;

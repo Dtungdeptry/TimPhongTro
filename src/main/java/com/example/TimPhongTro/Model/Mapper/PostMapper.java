@@ -30,7 +30,7 @@ public class PostMapper {
         dto.setRoomType(post.getRoomType());
         dto.setArea(post.getArea());
         dto.setCreated_at(post.getCreatedAt());
-        dto.setImageUrl(post.getImageUrl());
+
 
         return dto;
     }
@@ -48,9 +48,6 @@ public class PostMapper {
         post.setLocation(dto.getLocation());
         post.setArea(dto.getArea());
         post.setCreatedAt(dto.getCreated_at());
-        if (dto.getImageUrl() != null) {
-            post.setImageUrl(dto.getImageUrl());
-        }
 
         return post;
     }
