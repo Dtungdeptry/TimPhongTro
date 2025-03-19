@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -24,20 +25,39 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private UserRepository userRepository;
 
-    @Override
     public List<PostDto> getAllPosts() {
         List<Post> posts = postRepository.findAll();
-        return posts.stream()
-                .map(PostMapper::toDto)
-                .toList();
+        return posts.stream().map(post -> {
+            PostDto postDto = new PostDto();
+            postDto.setId(post.getId());
+            postDto.setTitle(post.getTitle());
+            postDto.setContent(post.getContent());
+            postDto.setStatus(post.getStatus());
+            postDto.setFullName(post.getUser().getFullName());
+            postDto.setPhone(post.getUser().getPhone());
+            return postDto;
+        }).collect(Collectors.toList());
     }
+
 
     @Override
     public PostDto getPostById(int id) {
-        return postRepository.findById(id)
-                .map(PostMapper::toDto)
+        Post post = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Bài đăng với ID " + id + " không tồn tại"));
+
+        // Lấy thông tin người dùng
+        User user = post.getUser();
+        PostDto postDto = PostMapper.toDto(post);
+
+        // Gán thêm thông tin phone và fullName
+        if (user != null) {
+            postDto.setFullName(user.getFullName());
+            postDto.setPhone(user.getPhone());
+        }
+
+        return postDto;
     }
+
 
     @Override
     public PostDto createPost(PostDto postDto) {
@@ -65,8 +85,15 @@ public class PostServiceImpl implements PostService {
             throw new RuntimeException("Không tìm thấy bài đăng với trạng thái: " + status);
         }
 
-        return PostMapper.toDto(posts);
+        // Map Post sang PostDto và gán fullName từ User
+        return posts.stream().map(post -> {
+            PostDto postDto = PostMapper.toDto(post);
+            postDto.setFullName(post.getUser().getFullName());
+            postDto.setPhone(post.getUser().getPhone());
+            return postDto;
+        }).collect(Collectors.toList());
     }
+
 
     @Override
     public void deletePostOwner(int userId, int postId) {
@@ -114,5 +141,22 @@ public class PostServiceImpl implements PostService {
         return posts.stream()
                 .map(PostMapper::toDto)
                 .toList();
+    }
+
+    @Override
+    public PostDto updatePostStatus(int id, String status) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy bài đăng với ID: " + id));
+
+        post.setStatus(status);
+        post = postRepository.save(post);
+
+        return PostMapper.toDto(post);
+    }
+
+    @Override
+    public List<PostDto> getLatestPosts() {
+        List<Post> posts = postRepository.findTop5ByOrderByCreatedAtDesc();
+        return PostMapper.toDto(posts);
     }
 }

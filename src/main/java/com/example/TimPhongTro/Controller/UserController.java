@@ -76,5 +76,11 @@ public class UserController {
     public List<AreaDto> getAreas() {
         return dropdownService.getAllAreas();
     }
+
+    @GetMapping("/post/latest")
+    public ResponseEntity<List<PostDto>> getLatestPosts() {
+        List<PostDto> posts = postService.getLatestPosts();
+        return ResponseEntity.ok(posts);
+    }
     //Trang thanh toán
 }

@@ -29,9 +29,6 @@ public class UserDto {
 
     private LocalDateTime created_at;  // Kiểm tra có khai báo không
 
-
-
-
     public UserDto(User user) {
         this.id = user.getId();
         this.username = user.getUsername();

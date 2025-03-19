@@ -14,4 +14,9 @@ public interface PostRepository extends JpaRepository<Post, Integer>, JpaSpecifi
     List<Post> findByStatus(String status);
     @Query("SELECT p FROM Post p WHERE p.title LIKE %:keyword%")
     List<Post> findByTitle(@Param("keyword") String keyword);
+
+    @Query("SELECT p FROM Post p LEFT JOIN FETCH p.user")
+    List<Post> findAll();
+
+    List<Post> findTop5ByOrderByCreatedAtDesc();
 }

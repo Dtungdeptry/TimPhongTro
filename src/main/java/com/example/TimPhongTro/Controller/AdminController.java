@@ -48,6 +48,17 @@ public class AdminController {
         return ResponseEntity.ok(posts);
     }
 
+    @PutMapping("/post/{id}")
+    public ResponseEntity<PostDto> updatePostStatus(
+            @PathVariable int id,
+            @RequestParam String status) {
+        try {
+            PostDto updatedPostDto = postService.updatePostStatus(id, status);
+            return ResponseEntity.ok(updatedPostDto);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 
     //Danh sách bài đăng đã được accepted (get, delete) (Xong)
     @GetMapping("/post/status/approved")

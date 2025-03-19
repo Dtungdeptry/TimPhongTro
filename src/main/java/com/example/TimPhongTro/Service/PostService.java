@@ -25,4 +25,8 @@ public interface PostService {
     PostDto updatePost(int id, PostDto postDto);
 
     List<PostDto> searchTitle(String keyword);
+
+    PostDto updatePostStatus(int id, String status);
+
+    List<PostDto> getLatestPosts();
 }
