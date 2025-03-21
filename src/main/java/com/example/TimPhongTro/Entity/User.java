@@ -38,7 +38,7 @@ public class User {
     private LocalDateTime createdAt;
 
     @Column(name = "otp")
-    private String otp;  // Lưu mã OTP
+    private String otp;
 
     @Column(name = "verified")
     private boolean verified;

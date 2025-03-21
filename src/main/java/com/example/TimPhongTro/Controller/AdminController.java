@@ -1,12 +1,17 @@
 package com.example.TimPhongTro.Controller;
 
 import com.example.TimPhongTro.Config.JwtUtil;
+import com.example.TimPhongTro.Entity.Role;
+import com.example.TimPhongTro.Entity.User;
 import com.example.TimPhongTro.Model.Dto.PostDto;
+import com.example.TimPhongTro.Model.Dto.RegisterRequest;
 import com.example.TimPhongTro.Model.Dto.UserDto;
 import com.example.TimPhongTro.Repository.PostRepository;
 import com.example.TimPhongTro.Service.PostService;
 import com.example.TimPhongTro.Service.UserService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -150,3 +155,4 @@ public class AdminController {
         return ResponseEntity.ok("Xóa người dùng thành công");
     }
 }
+

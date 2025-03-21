@@ -8,7 +8,7 @@ public class RegisterRequest {
     private String phone;
     private String fullName;
     private String address;
-//    private String otp;
+    private String otp;
 
     // Getters and setters
     public String getUsername() {
@@ -67,12 +67,12 @@ public class RegisterRequest {
         this.address = address;
     }
 
-//    public String getOtp() {
-//        return otp;
-//    }
-//
-//    public void setOtp(String otp) {
-//        this.otp = otp;
-//    }
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
+    }
 }
 

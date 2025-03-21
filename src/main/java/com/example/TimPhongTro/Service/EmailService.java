@@ -21,11 +21,15 @@ public class EmailService {
 
     public void sendOtpEmail(String to, String otp) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+        // Đặt địa chỉ email người gửi
+        helper.setFrom("dtung6898@gmail.com");
         helper.setTo(to);
         helper.setSubject("Xác thực đăng ký - TimPhongTro");
-        helper.setText("Mã OTP của bạn là: " + otp);
+        helper.setText("Mã OTP của bạn là: " + otp, true);
 
         mailSender.send(message);
     }
+
 }

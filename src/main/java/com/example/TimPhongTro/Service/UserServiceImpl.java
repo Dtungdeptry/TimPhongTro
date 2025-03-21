@@ -6,6 +6,7 @@ import com.example.TimPhongTro.Model.Mapper.UserMapper;
 import com.example.TimPhongTro.Repository.RoleRepository;
 import com.example.TimPhongTro.Repository.UserRepository;
 import com.example.TimPhongTro.Entity.User;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -119,6 +120,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     @Override
     public void registerUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
