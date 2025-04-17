@@ -27,12 +27,6 @@ public class AdminController {
     @Autowired
     private PostService postService;
 
-    @Autowired
-    private PostRepository postRepository;
-
-    @Autowired
-    private JwtUtil jwtUtil;
-
     //Quản lý tất cả bài đăng
     @GetMapping("/post")
     public ResponseEntity<List<PostDto>> getAllPosts() {
@@ -74,8 +68,8 @@ public class AdminController {
 
     @DeleteMapping("/post/status/approved/{id}")
     public ResponseEntity<?> deleteApprovedPost(@PathVariable int id) {
-            postService.deletePostById(id);
-            return ResponseEntity.ok("Bài đăng đã được xóa thành công");
+        postService.deletePostById(id);
+        return ResponseEntity.ok("Bài đăng đã được xóa thành công");
     }
 
     //Danh sách bài đăng bị rejected (get)

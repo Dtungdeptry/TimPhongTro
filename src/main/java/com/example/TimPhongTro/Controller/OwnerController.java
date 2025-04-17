@@ -64,8 +64,8 @@ public class OwnerController {
     }
 
     @GetMapping("/post/{userId}/search") //search fullname
-    public ResponseEntity<?> searchTitle(@RequestParam String keyword) {
-        List<PostDto> posts = postService.searchTitle(keyword);
+    public ResponseEntity<?> searchTitle(@PathVariable int userId, @RequestParam String keyword) {
+        List<PostDto> posts = postService.searchTitle(userId, keyword);
         return ResponseEntity.ok(posts);
     }
 

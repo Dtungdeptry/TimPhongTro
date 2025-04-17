@@ -12,11 +12,9 @@ public interface PostRepository extends JpaRepository<Post, Integer>, JpaSpecifi
     List<Post> findByUserId(int userId); // Dành cho admin
     List<Post> findByIdAndUser_Id(int id, int userId);
     List<Post> findByStatus(String status);
-    @Query("SELECT p FROM Post p WHERE p.title LIKE %:keyword%")
-    List<Post> findByTitle(@Param("keyword") String keyword);
 
-    @Query("SELECT p FROM Post p LEFT JOIN FETCH p.user")
-    List<Post> findAll();
-
+    @Query("SELECT p FROM Post p WHERE p.user.id = :userId AND p.title LIKE %:keyword%")
+    List<Post> findByTitle(@Param("userId") int userId, @Param("keyword") String keyword);
+    
     List<Post> findTop5ByOrderByCreatedAtDesc();
 }

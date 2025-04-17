@@ -25,6 +25,7 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private UserRepository userRepository;
 
+    @Override
     public List<PostDto> getAllPosts() {
         List<Post> posts = postRepository.findAll();
         return posts.stream().map(post -> {
@@ -35,6 +36,7 @@ public class PostServiceImpl implements PostService {
             postDto.setStatus(post.getStatus());
             postDto.setFullName(post.getUser().getFullName());
             postDto.setPhone(post.getUser().getPhone());
+            postDto.setCreated_at(post.getCreatedAt());
             return postDto;
         }).collect(Collectors.toList());
     }
@@ -135,9 +137,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> searchTitle(String keyword) {
+    public List<PostDto> searchTitle(int userId, String keyword) {
         String processedKeyword = "%" + keyword + "%";
-        List<Post> posts = postRepository.findByTitle(processedKeyword);
+        List<Post> posts = postRepository.findByTitle(userId, processedKeyword);
         return posts.stream()
                 .map(PostMapper::toDto)
                 .toList();

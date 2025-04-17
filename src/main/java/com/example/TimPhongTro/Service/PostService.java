@@ -16,15 +16,13 @@ public interface PostService {
 
     void deletePostOwner(int userId, int postId);
 
-//    List<PostDto> getPostsBySearchCriteria(String priceRange, String roomType, String location, String area);
-
     List<PostDto> getPostsBySearchCriteria(String priceRange, String roomType, String location, String area, String status);
 
     void deletePostById(int postId);
 
     PostDto updatePost(int id, PostDto postDto);
 
-    List<PostDto> searchTitle(String keyword);
+    List<PostDto> searchTitle(int userId, String keyword);
 
     PostDto updatePostStatus(int id, String status);
 

@@ -131,22 +131,16 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Người dùng không tồn tại!");
         }
 
-        System.out.println("OTP trong CSDL: " + user.getOtp());  // In OTP từ CSDL
-        System.out.println("OTP người dùng nhập: " + otp);        // In OTP từ người dùng
-
         if (user.getOtp() != null && user.getOtp().equals(otp)) {
             user.setVerified(true);
             user.setOtp(null);  // Xóa OTP sau khi xác thực
             userService.updateUserLogin(user);
 
-            System.out.println("Xác thực thành công!");
             return ResponseEntity.ok("Xác thực thành công! Bạn có thể đăng nhập.");
         } else {
-            System.out.println("OTP không chính xác hoặc đã hết hạn!");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("OTP không chính xác hoặc đã hết hạn!");
         }
     }
-
 
     @PostMapping("/resend-otp")
     public ResponseEntity<?> resendOtp(@RequestParam String username) throws MessagingException {
@@ -166,6 +160,5 @@ public class AuthController {
 
         return ResponseEntity.ok("Mã OTP mới đã được gửi!");
     }
-
 }
 

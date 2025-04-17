@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> searchUser(String keyword) {
-        List<User> users = userRepository.findByFullNameContainingIgnoreCaseAndRole_Id(keyword, 2);
+        List<User> users = userRepository.findByPhoneContainingIgnoreCaseAndRole_Id(keyword, 2);
         return users.stream()
                 .map(UserMapper::toDto)
                 .toList();
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> searchOwner(String keyword) {
-        List<User> users = userRepository.findByFullNameContainingIgnoreCaseAndRole_Id(keyword, 3);
+        List<User> users = userRepository.findByPhoneContainingIgnoreCaseAndRole_Id(keyword, 3);
         return users.stream().map(UserMapper::toDto).collect(Collectors.toList());
     }
 

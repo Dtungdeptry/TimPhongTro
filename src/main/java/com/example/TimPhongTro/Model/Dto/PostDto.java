@@ -18,6 +18,15 @@ public class PostDto {
     private LocalDateTime created_at;
     private String fullName;
     private String phone;
+    private String imageUrl;
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
     public String getPhone() {
         return phone;

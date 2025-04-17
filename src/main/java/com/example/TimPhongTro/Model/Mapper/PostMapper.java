@@ -30,14 +30,12 @@ public class PostMapper {
         dto.setRoomType(post.getRoomType());
         dto.setArea(post.getArea());
         dto.setCreated_at(post.getCreatedAt());
-
+        dto.setImageUrl(post.getImageUrl());
 
         return dto;
     }
 
     public static Post toEntity(PostDto dto) {
-
-
         Post post = new Post();
         post.setId(dto.getId());
         post.setTitle(dto.getTitle());
@@ -48,6 +46,7 @@ public class PostMapper {
         post.setLocation(dto.getLocation());
         post.setArea(dto.getArea());
         post.setCreatedAt(dto.getCreated_at());
+        post.setImageUrl(dto.getImageUrl());
 
         return post;
     }
