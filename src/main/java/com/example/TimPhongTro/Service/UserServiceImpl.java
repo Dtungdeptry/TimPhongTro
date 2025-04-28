@@ -73,17 +73,19 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userDto.getId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Cập nhật thông tin người dùng
         user.setUsername(userDto.getUsername());
         user.setEmail(userDto.getEmail());
         user.setPhone(userDto.getPhone());
         user.setAddress(userDto.getAddress());
         user.setFullName(userDto.getFullName());
 
-        // Lấy Role từ database dựa trên role_id
+        if (userDto.getRole() != user.getRole().getId()) {
+            throw new RuntimeException("Bạn không thể thay đổi vai trò của mình.");
+        }
+
         Role role = roleRepository.findById(userDto.getRole())
                 .orElseThrow(() -> new RuntimeException("Role not found"));
-        user.setRole(role); // ✅ Gán object Role đúng cách
+        user.setRole(role);
 
         user = userRepository.save(user);
         return UserMapper.toDto(user);

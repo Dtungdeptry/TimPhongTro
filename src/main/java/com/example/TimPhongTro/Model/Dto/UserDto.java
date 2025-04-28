@@ -19,6 +19,16 @@ public class UserDto {
     private String address;
     private int role_id;
 
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
+
+    private boolean verified;
+
     public LocalDateTime getCreated_at() {
         return created_at;
     }
@@ -38,6 +48,7 @@ public class UserDto {
         this.fullName = user.getFullName();
         this.address = user.getAddress();
         this.role_id = user.getRole().getId();
+        this.verified = user.isVerified();
     }
 
     public UserDto() {
@@ -61,6 +72,7 @@ public class UserDto {
         this.phone = phone;
         this.address = address;
         this.role_id = role_id;
+        this.verified = false;
     }
 
     public int getId() {

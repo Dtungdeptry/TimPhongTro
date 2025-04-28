@@ -7,7 +7,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
@@ -20,4 +19,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("SELECT u FROM User u WHERE LOWER(u.phone) LIKE LOWER(CONCAT('%', :phoneKeyword, '%')) AND u.role.id = :roleId")
     List<User> findByPhoneContainingIgnoreCaseAndRole_Id(@Param("phoneKeyword") String phoneKeyword, @Param("roleId") int roleId);
+
+    User findByEmail(String email);
 }

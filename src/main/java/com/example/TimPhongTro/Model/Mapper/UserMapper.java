@@ -19,6 +19,7 @@ public class UserMapper {
         dto.setCreated_at(user.getCreatedAt());
         // Lấy role_id từ Role object
         dto.setRole(user.getRole() != null ? user.getRole().getId() : null);
+        dto.setVerified(user.isVerified());
         return dto;
     }
 
@@ -36,6 +37,7 @@ public class UserMapper {
         user.setAddress(dto.getAddress());
         user.setCreatedAt(dto.getCreated_at());
         user.setRole(role);
+        user.setVerified(dto.isVerified());
         return user;
     }
 }

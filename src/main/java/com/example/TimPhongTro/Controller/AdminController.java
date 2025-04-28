@@ -1,15 +1,9 @@
 package com.example.TimPhongTro.Controller;
 
-import com.example.TimPhongTro.Config.JwtUtil;
-import com.example.TimPhongTro.Entity.Role;
-import com.example.TimPhongTro.Entity.User;
 import com.example.TimPhongTro.Model.Dto.PostDto;
-import com.example.TimPhongTro.Model.Dto.RegisterRequest;
 import com.example.TimPhongTro.Model.Dto.UserDto;
-import com.example.TimPhongTro.Repository.PostRepository;
 import com.example.TimPhongTro.Service.PostService;
 import com.example.TimPhongTro.Service.UserService;
-import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,124 +23,239 @@ public class AdminController {
 
     //Quản lý tất cả bài đăng
     @GetMapping("/post")
-    public ResponseEntity<List<PostDto>> getAllPosts() {
-        List<PostDto> posts = postService.getAllPosts();
-        return ResponseEntity.ok(posts);
+    public ResponseEntity<?> getAllPosts() {
+        try {
+            List<PostDto> posts = postService.getAllPosts();
+            return ResponseEntity.ok(posts);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Đã xảy ra lỗi khi lấy danh sách bài đăng.");
+        }
     }
 
-    @GetMapping("post/{id}")
-    public ResponseEntity<PostDto> getPostById(@PathVariable int id) {
-        PostDto postDto = postService.getPostById(id);
-        return ResponseEntity.ok(postDto);
+    @GetMapping("/post/{id}")
+    public ResponseEntity<?> getPostById(@PathVariable int id) {
+        try {
+            PostDto postDto = postService.getPostById(id);
+            return ResponseEntity.ok(postDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Không thể lấy bài đăng với id = " + id);
+        }
     }
 
-    //Danh sách bài đăng đang trong trạng thái pending (get, put)
+    // Danh sách bài đăng đang trong trạng thái pending (get)
     @GetMapping("/post/status/pending")
-    public ResponseEntity<List<PostDto>> getPendingPosts() {
-        List<PostDto> posts = postService.getPostsByStatus("pending");
-        return ResponseEntity.ok(posts);
+    public ResponseEntity<?> getPendingPosts() {
+        try {
+            List<PostDto> posts = postService.getPostsByStatus("pending");
+            return ResponseEntity.ok(posts);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Không thể lấy danh sách bài đăng đang pending.");
+        }
     }
 
+    // Cập nhật trạng thái bài đăng (put)
     @PutMapping("/post/{id}")
-    public ResponseEntity<PostDto> updatePostStatus(
+    public ResponseEntity<?> updatePostStatus(
             @PathVariable int id,
             @RequestParam String status) {
         try {
             PostDto updatedPostDto = postService.updatePostStatus(id, status);
             return ResponseEntity.ok(updatedPostDto);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Cập nhật trạng thái thất bại cho bài đăng id = " + id);
         }
     }
 
-    //Danh sách bài đăng đã được accepted (get, delete) (Xong)
+    // Danh sách bài đăng đã được approved (get)
     @GetMapping("/post/status/approved")
-    public ResponseEntity<List<PostDto>> getApprovedPosts() {
-        List<PostDto> posts = postService.getPostsByStatus("approved");
-        return ResponseEntity.ok(posts);
+    public ResponseEntity<?> getApprovedPosts() {
+        try {
+            List<PostDto> posts = postService.getPostsByStatus("approved");
+            return ResponseEntity.ok(posts);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Không thể lấy danh sách bài đăng đã được duyệt.");
+        }
     }
 
+    // Xóa bài đăng đã được approved (delete)
     @DeleteMapping("/post/status/approved/{id}")
     public ResponseEntity<?> deleteApprovedPost(@PathVariable int id) {
-        postService.deletePostById(id);
-        return ResponseEntity.ok("Bài đăng đã được xóa thành công");
+        try {
+            postService.deletePostById(id);
+            return ResponseEntity.ok("Bài đăng đã được xóa thành công.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Xóa bài đăng thất bại với id = " + id);
+        }
     }
 
-    //Danh sách bài đăng bị rejected (get)
+    // Danh sách bài đăng bị rejected (get)
     @GetMapping("/post/status/rejected")
-    public ResponseEntity<List<PostDto>> getRejectedPosts() {
-        List<PostDto> posts = postService.getPostsByStatus("rejected");
-        return ResponseEntity.ok(posts);
+    public ResponseEntity<?> getRejectedPosts() {
+        try {
+            List<PostDto> posts = postService.getPostsByStatus("rejected");
+            return ResponseEntity.ok(posts);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Không thể lấy danh sách bài đăng bị từ chối.");
+        }
     }
 
-    //Danh sách Owner (get, delete, search)
+    // Lấy danh sách Owner
     @GetMapping("/owners")
     public ResponseEntity<?> getOwnersByRoleId() {
+        try {
             List<UserDto> users = userService.getUsersByRoleId(3);
             return ResponseEntity.ok(users);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Không thể lấy danh sách chủ nhà.");
+        }
     }
 
+    // Lấy Owner theo ID
     @GetMapping("/owners/{id}")
     public ResponseEntity<?> getOwnerById(@PathVariable int id) {
-        UserDto userDto = userService.getUserById(id);
-        return ResponseEntity.ok(userDto);
+        try {
+            UserDto userDto = userService.getUserById(id);
+            return ResponseEntity.ok(userDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Không thể lấy thông tin chủ nhà với id = " + id);
+        }
     }
 
-    @GetMapping("/owners/search") //search fullname
+    // Tìm kiếm Owner theo từ khóa (fullname)
+    @GetMapping("/owners/search")
     public ResponseEntity<?> searchOwner(@RequestParam String keyword) {
-        List<UserDto> users = userService.searchOwner(keyword);
-        return ResponseEntity.ok(users);
+        try {
+            List<UserDto> users = userService.searchOwner(keyword);
+            return ResponseEntity.ok(users);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Không thể tìm kiếm chủ nhà với từ khóa: " + keyword);
+        }
     }
 
+    // Xóa Owner theo ID
     @DeleteMapping("/owners/{id}")
     public ResponseEntity<?> deleteOwner(@PathVariable int id) {
-        userService.deleteUser(id);
-        return ResponseEntity.ok("Owner đã được xóa thành công");
+        try {
+            userService.deleteUser(id);
+            return ResponseEntity.ok("Chủ nhà đã được xóa thành công.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Xóa chủ nhà thất bại với id = " + id);
+        }
     }
 
-    //Danh sách bài đăng theo Id của Owner (get, delete)
+    // Lấy danh sách bài đăng theo ID Owner
     @GetMapping("/posts/{userId}")
     public ResponseEntity<?> getPostsByUserId(@PathVariable int userId) {
-        List<PostDto> posts = postService.getPostByUserId(userId);
-        return ResponseEntity.ok(posts);
+        try {
+            List<PostDto> posts = postService.getPostByUserId(userId);
+            return ResponseEntity.ok(posts);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Không thể lấy danh sách bài đăng của chủ nhà.");
+        }
     }
 
+    // Xóa bài đăng của Owner
     @DeleteMapping("/posts/{userId}/{id}")
     public ResponseEntity<?> deletePostOwner(@PathVariable int userId, @PathVariable int id) {
-        postService.deletePostOwner(userId, id);
-        return ResponseEntity.ok("Xóa bài đăng thành công");
+        try {
+            postService.deletePostOwner(userId, id);
+            return ResponseEntity.ok("Xóa bài đăng thành công.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Xóa bài đăng thất bại.");
+        }
     }
 
-    //Danh sách User (get, delete, put, search)
+    // Lấy danh sách User
     @GetMapping("/users")
     public ResponseEntity<?> getUsersByRoleId() {
-        List<UserDto> users = userService.getUsersByRoleId(2);
-        return ResponseEntity.ok(users);
+        try {
+            List<UserDto> users = userService.getUsersByRoleId(2);
+            return ResponseEntity.ok(users);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Không thể lấy danh sách người dùng.");
+        }
     }
 
+    // Lấy User theo ID
     @GetMapping("/users/{id}")
     public ResponseEntity<?> getUserById(@PathVariable int id) {
-        UserDto userDto = userService.getUserById(id);
-        return ResponseEntity.ok(userDto);
+        try {
+            UserDto userDto = userService.getUserById(id);
+            return ResponseEntity.ok(userDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Không thể lấy thông tin người dùng với id = " + id);
+        }
     }
 
+    // Tìm kiếm User theo từ khóa
     @GetMapping("/users/search")
     public ResponseEntity<?> searchUser(@RequestParam String keyword) {
-        List<UserDto> users = userService.searchUser(keyword);
-        return ResponseEntity.ok(users);
+        try {
+            List<UserDto> users = userService.searchUser(keyword);
+            return ResponseEntity.ok(users);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Không thể tìm kiếm người dùng với từ khóa: " + keyword);
+        }
     }
 
+    // Cập nhật quyền từ User thành Owner
     @PutMapping("/users/{id}")
     public ResponseEntity<?> updateOwnerRoleFromUser(@PathVariable int id, @RequestBody UserDto userDto) {
-        int newRoleId = userDto.getRole();
-        userService.updateUserRole(id, newRoleId);
-        return ResponseEntity.ok("Cập nhật quyền thành công");
+        try {
+            int newRoleId = userDto.getRole();
+            userService.updateUserRole(id, newRoleId);
+            return ResponseEntity.ok("Cập nhật quyền thành công.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Cập nhật quyền thất bại.");
+        }
     }
 
+    // Xóa User
     @DeleteMapping("/users/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable int id) {
-        userService.deleteUser(id);
-        return ResponseEntity.ok("Xóa người dùng thành công");
+        try {
+            userService.deleteUser(id);
+            return ResponseEntity.ok("Xóa người dùng thành công.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Xóa người dùng thất bại.");
+        }
     }
+
 }
 
